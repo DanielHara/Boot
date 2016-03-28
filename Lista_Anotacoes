@@ -1,0 +1,31 @@
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Lista_Anotacoes extends ArrayList<Anotacao> {
+
+	public Lista_Anotacoes ()
+	{
+		super();
+	}
+	
+	public void Ordenar_Por_Data ()
+	{
+		boolean swapped;
+		int n = size();
+		int i;
+		
+		do
+		{
+			swapped = false;
+			for (i = 1; i<n; i++)
+			{
+				if ( get(i-1).getDate().before(get(i).getDate())   )
+				{
+					Collections.swap(this, i - 1, i);
+					swapped = true;
+				}
+			}
+		} while (swapped);
+	}
+	
+}
