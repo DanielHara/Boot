@@ -1,6 +1,11 @@
 import javax.swing.*;     // Para os Frames
 import java.awt.*;        // Para a interface grafica
 import java.awt.event.*;  // Para os eventos
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.Font;
 
@@ -18,11 +23,13 @@ public class Notepad extends JFrame implements ActionListener{
 	
 	private JMenu fileMenu = new JMenu ("File");
 	
-	private JMenuItem item_Remover = new JMenuItem("Remover");
+	private JMenuItem item_Salvar = new JMenuItem("Salvar");
 	
 	private Lista_Anotacoes Lista = new Lista_Anotacoes ();
 	
 	private JButton Botao = new JButton ("Ordenar por Data");
+	
+	private JLabel Label1 = new JLabel("Anotacao");
 	
 //	private ArrayList<Anotacao> Lista = new ArrayList<Anotacao>();
 	
@@ -46,12 +53,16 @@ public class Notepad extends JFrame implements ActionListener{
 		
 		Panel.add(Botao);
 		
+		Panel.add(Label1);
+		
+		Label1.setLabelFor(textField);
+		
 		//this.add(MenuBar);
         this.setJMenuBar(MenuBar);
         
 		MenuBar.add(fileMenu);
 		
-		fileMenu.add(item_Remover);
+		fileMenu.add(item_Salvar);
 		
 		
 		textField.addActionListener(this);
@@ -60,7 +71,7 @@ public class Notepad extends JFrame implements ActionListener{
 		
 		Botao.addActionListener(this);
 		
-		item_Remover.addActionListener(this);
+		item_Salvar.addActionListener(this);
 		
 	}
 	
@@ -115,6 +126,17 @@ public class Notepad extends JFrame implements ActionListener{
 			Data_Crescente ();
 			
 		}
+		else if (source == item_Salvar)
+		{
+			try
+			{
+				Salvar("saida.txt");
+			}
+			catch (IOException ev)
+			{
+				;
+			}
+		}
 	}
 	
 	
@@ -161,54 +183,28 @@ public class Notepad extends JFrame implements ActionListener{
 		Show_All();
 	}
 	
-	
-	
-	
-/*	public void Salvar (String Nome_Arquivo)
+	public void Salvar (String Nome_Arquivo) throws IOException
 	{
-		FileOutputStream = 
+		File arquivo = new File (Nome_Arquivo);
+		arquivo.createNewFile();
+		FileWriter Escritor = null;
+		try
+		{
+			Escritor = new FileWriter(arquivo);
+			
+			for (int i=0; i< Lista.size(); i++)
+				Escritor.write("Anotacao " + (i + 1) + ": \r\n" + Lista.get(i).getNome()  + "\r\n" + Lista.get(i).getTexto() + "\r\n" + Lista.get(i).getMetaTag() + "\r\n" +  Lista.get(i).getData() + "\r\n");
+			
+			Escritor.flush();
+			Escritor.close();
+		}
+		catch (IOException e)
+		{
+		    JOptionPane.showMessageDialog(this, "ERRO no arquivo de SAIDA!");
+		}
 		
 	}
-	*/
-/*
-	private static void createAndShowGUI()
-	{
-		JFrame frame = new JFrame("TextDemo");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		frame.add(new Notepad());
-
-	//	frame.pack();
-		frame.setVisible(true);
-}    
-
-	private static void GUI (Notepad bloco)
-	{
-		JFrame  frame = new JFrame ("CARTAS!");
-		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		frame.add(bloco);
-
-	    frame.pack();
-		frame.setVisible(true);
-		
-	}   
-
-	public static void main(String[] args) {
- 
-		JFrame  frame = new JFrame ("CARTAS!");
-		
-        Notepad bloco = new Notepad();
-        
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		frame.add(bloco);
-
-	    frame.pack();
-		frame.setVisible(true);
-        
-	}     */
+	
 	public static void main(String[] args) {
 		
 		Notepad bloco = new Notepad ();
@@ -218,6 +214,5 @@ public class Notepad extends JFrame implements ActionListener{
 		bloco.pack();
 		bloco.setVisible(true);
 		
-		//  GUI (bloco);
 	}
 }
