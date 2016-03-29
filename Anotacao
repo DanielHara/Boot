@@ -13,6 +13,7 @@ public class Anotacao {
 
 	private String Texto;
 	private String MetaTag;
+	private String Nome;
 	private DateFormat SimpleData;
 	private Date Data;
 	
@@ -20,6 +21,7 @@ public class Anotacao {
 	{
 		Texto = "";
 		MetaTag = "";
+		Nome = "";
 		Data = new Date();
 		SimpleData = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	}
@@ -40,6 +42,12 @@ public class Anotacao {
 	{
 		return SimpleData.format(Data);
 	}
+
+	public Date getDate ()
+	{
+		
+		return Data; 
+	}
 	
 	public String getTexto ()
 	{
@@ -49,6 +57,11 @@ public class Anotacao {
 	public String getMetaTag()
 	{
 		return MetaTag;
+	}
+	
+	public String getNome()
+	{
+		return Nome;
 	}
 }
 
