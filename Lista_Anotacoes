@@ -1,3 +1,7 @@
+//Daniel Hara e Gabriel Lima
+//Projeto Boot de CES-22 - Bloco de anotações
+//Prof. Yano
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -35,6 +39,40 @@ public class Lista_Anotacoes extends ArrayList<Anotacao> {
 		} while (swapped);
 	}
 	
+	//Esta função ordena a lista por MetaTag, em ordem alfabética, colocando na frente (menor índice) os nomes com
+		//menor ordem alfabética (A-Z: menor - maior índice).
+	
+	public void Ordenar_Por_MetaTag ()
+	{
+		boolean swapped;
+		int n = size();
+		int i;
+		
+		do
+		{
+			swapped = false;
+			for (i = 1; i<n; i++)
+			{
+				
+				if (get(i-1).getMetaTag() == null  &&   get(i).getMetaTag() == null  )
+					;
+				else if (get(i-1).getMetaTag() == null && get(i).getMetaTag() != null)
+					;
+				else if (get(i-1).getMetaTag() != null && get(i).getMetaTag() == null)
+				{
+					Collections.swap(this, i - 1, i);
+					swapped = true;
+				}  	
+				else if ( get(i-1).getMetaTag().compareTo(get(i).getMetaTag()) > 0   )
+				{
+					Collections.swap(this, i - 1, i);
+					swapped = true;
+				}  
+			}   
+		} while (swapped);
+		
+	}
+	
 	//Esta função ordena a lista por Nome, em ordem alfabética, colocando na frente (menor índice) os nomes com
 	//menor ordem alfabética (A-Z: menor - maior índice).
 	
@@ -49,15 +87,58 @@ public class Lista_Anotacoes extends ArrayList<Anotacao> {
 			swapped = false;
 			for (i = 1; i<n; i++)
 			{
-				if ( get(i-1).getNome().compareTo(get(i).getNome()) < 0   )
+				
+				if (get(i-1).getNome() == null  &&   get(i).getNome() == null  )
+					;
+				else if (get(i-1).getNome() == null && get(i).getNome() != null)
+					;
+				else if (get(i-1).getNome() != null && get(i).getNome() == null)
 				{
 					Collections.swap(this, i - 1, i);
 					swapped = true;
-				}
-			}
+				}  	
+				else if ( get(i-1).getNome().compareTo(get(i).getNome()) > 0   )
+				{
+					Collections.swap(this, i - 1, i);
+					swapped = true;
+				}  
+			}   
+		} while (swapped);
+		
+	}
+	
+	
+	//Esta função ordena a lista por Texto, em ordem alfabética, colocando na frente (menor índice) os nomes com
+	//menor ordem alfabética (A-Z: menor - maior índice).
+	
+	public void Ordenar_Por_Texto ()
+	{
+		boolean swapped;
+		int n = size();
+		int i;
+		
+		do
+		{
+			swapped = false;
+			for (i = 1; i<n; i++)
+			{
+				if (get(i-1).getTexto() == null  &&   get(i).getTexto() == null  )
+					;
+				else if (get(i-1).getTexto() == null && get(i).getTexto() != null)
+					;
+				else if (get(i-1).getTexto() != null && get(i).getTexto() == null)
+				{
+					Collections.swap(this, i - 1, i);
+					swapped = true;
+				}  	
+				if ( get(i-1).getTexto().compareTo(get(i).getTexto()) > 0   )
+				{
+					Collections.swap(this, i - 1, i);
+					swapped = true;
+				}  
+			}   
 		} while (swapped);
 		
 	}
 	
 }
-
