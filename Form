@@ -1,0 +1,70 @@
+//Daniel Hara e Gabriel Lima
+//Projeto Boot de CES-22 - Bloco de anotações
+//Prof. Yano
+
+
+import javax.swing.*;     // Para os Frames
+import java.awt.*;        // Para a interface grafica
+import java.awt.event.*;  // Para os eventos
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.awt.Font;
+
+//Esta classe cria um JPanel que contém os TextFields, os campos onde são digitados os componentes das anotações,
+//e os JLabels, os  rótulos dos campos, para orientar o usuário.
+
+//Para fazer com que os JLabels e os TextFields ficassem alinhados como desejados, usamos uma adaptação do modelo 
+//apresentado no site: http://www.java2s.com/Code/Java/Swing-JFC/Asimplelabelforfieldformpanel.htm
+
+public class Form extends JPanel{ 
+
+	private JTextField[] Campos;    //Vetor de TextFields
+	private int n;  			//Número de Campos
+	
+	//Construtor. Sendo n o número de Strings no vetor de Strings, criamos n TextFields e n Labels, cujo
+	//conteúdo são as Strings entradas.
+	
+	public Form(String[] Labels)  
+	{
+		super(new BorderLayout());
+		JPanel labelPanel = new JPanel(new GridLayout(Labels.length,1));
+		JPanel fieldPanel = new JPanel(new GridLayout(Labels.length,1));
+		add(labelPanel, BorderLayout.WEST);
+		add(fieldPanel, BorderLayout.CENTER);
+		
+		n = Labels.length;
+		
+		Campos = new JTextField[Labels.length];
+		
+		for (int i = 0; i < Labels.length; i++)
+		{
+			Campos[i] = new JTextField(30);
+			
+			JLabel label = new JLabel(Labels[i], JLabel.RIGHT);
+			label.setLabelFor(Campos[i]);
+			
+			labelPanel.add(label);
+			
+			JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
+			p.add(Campos[i]);
+			fieldPanel.add(p);
+		}
+	}
+	
+	//Esta função lê o que foi digitado no (i+1)-ésimo Campo, de um total de n. (O primeiro indice é 0, e o último é n-1).
+	
+	public String get_Texto_i_Campo (int i) {
+		if (i>-1 && i < n)
+			return Campos[i].getText();
+		else
+		{
+			System.out.println("ERRO: Entrada inválida! i não corresponde a nenhuma campo!");
+			return null;
+		}
+	}
+	
+}
