@@ -1,3 +1,7 @@
+//Daniel Hara e Gabriel Lima
+//Projeto Boot de CES-22 - Bloco de anotações
+//Prof. Yano
+
 import javax.swing.*;     // Para os Frames
 import java.awt.*;        // Para a interface grafica
 import java.awt.event.*;  // Para os eventos
@@ -29,6 +33,16 @@ public class Anotacao {
 	public void Escrever_Texto (String escrever)
 	{
 		Texto = escrever;
+	}
+	
+	public void Escrever_MetaTag (String escrever)
+	{
+		MetaTag = escrever;
+	}
+	
+	public void Escrever_Nome (String escrever)
+	{
+		Nome = escrever;
 	}
 	
 	public void Escrever_Data ()
