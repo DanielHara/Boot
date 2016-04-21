@@ -1,23 +1,23 @@
+//Daniel Hara e Gabriel Lima
+//Projeto Boot de CES-22 - Bloco de anotações
+//Prof. Yano
+
 import javax.swing.*;     // Para os Frames
 import java.awt.*;        // Para a interface grafica
 import java.awt.event.*;  // Para os eventos
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileNotFoundException;    //Para a entrada/saída de arquivos
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.ArrayList;				//Para a manipulação de Listas
 import java.awt.Font;
 
 public class Notepad extends JFrame implements ActionListener{
 	
-	private static JPanel Panel = new JPanel();
+	//Declaração de Variáveis
 	
-	private JTextField textField = new JTextField(30);
 	private JTextArea textArea = new JTextArea(30,30);
-	
-	private JTextField textField2 = new JTextField(6);
-	private JTextField textField3 = new JTextField(6);
 	
 	private JMenuBar MenuBar = new JMenuBar ();
 	
@@ -29,47 +29,60 @@ public class Notepad extends JFrame implements ActionListener{
 	
 	private JButton Botao = new JButton ("Ordenar por Data");
 	
-	private JLabel Label1 = new JLabel("Anotacao");
+	private JButton Botao2 = new JButton ("Ordenar por Texto");
+		
+	private JButton Botao3 = new JButton ("Anotar!");
 	
-//	private ArrayList<Anotacao> Lista = new ArrayList<Anotacao>();
+	private JButton Botao4 = new JButton ("Remover!");
+	
+	private JButton Botao5 = new JButton ("Editar!");
+	
+	private JButton Botao6 = new JButton ("Ordenar por Nome");
+	
+	private JButton Botao7 = new JButton ("Ordenar por MetaTag");
+	
+	private static JPanel PanelButton = new JPanel();
+	
+	private static JPanel TextAreaPanel = new JPanel();
+	
+	private static Form Formulario;
 	
 	public Notepad ()
 	{
 		
 		super();
-		Panel.setSize(300, 300);
-		textField.setFont(new Font(("Serif"), Font.BOLD, 16));
+		
+		String Labels[] = {"Nome da Anotação:", "Texto da Anotação:", "Meta-Tag da Anotação:", "Remover (No da anotação):", "Editar: (No da anotacao, Novo Texto)"};
+		
+		Formulario = new Form(Labels);
+		
+		PanelButton.add(Botao);    //Adicionar os botões
+		PanelButton.add(Botao2);
+		PanelButton.add(Botao3);
+		PanelButton.add(Botao4);
+		PanelButton.add(Botao5);
+		PanelButton.add(Botao6);
+		PanelButton.add(Botao7);
+		
 		textArea.setFont(new Font(("Serif"), Font.BOLD, 16));
-		textField2.setFont(new Font(("Serif"), Font.BOLD, 16));
-		textField3.setFont(new Font(("Serif"), Font.BOLD, 16));
 		
-		textArea.setEditable(false);
+		textArea.setEditable(false);   //Adicionar uma TextArea para mostrar as anotações
         
-		Panel.add(textArea);
-		
-		Panel.add(textField);
-		Panel.add(textField2);
-		Panel.add(textField3);
-		
-		Panel.add(Botao);
-		
-		Panel.add(Label1);
-		
-		Label1.setLabelFor(textField);
-		
-		//this.add(MenuBar);
+		TextAreaPanel.add(textArea);
+				
         this.setJMenuBar(MenuBar);
         
-		MenuBar.add(fileMenu);
+		MenuBar.add(fileMenu);    //Menu com botão para salvar as anotações em um arquivo ("Saida.txt")
 		
 		fileMenu.add(item_Salvar);
 		
-		
-		textField.addActionListener(this);
-		textField2.addActionListener(this);
-		textField3.addActionListener(this);
-		
-		Botao.addActionListener(this);
+		Botao.addActionListener(this);		//Adicionar ActionListeners
+		Botao2.addActionListener(this);
+		Botao3.addActionListener(this);
+		Botao4.addActionListener(this);
+		Botao5.addActionListener(this);
+		Botao6.addActionListener(this);
+		Botao7.addActionListener(this);
 		
 		item_Salvar.addActionListener(this);
 		
@@ -79,58 +92,77 @@ public class Notepad extends JFrame implements ActionListener{
 	{
 		Object source = e.getSource();
 		int n;
-		if (source == textField)
+		if (source == Botao3)
 		{
-			Anotacao Lido = new Anotacao ();
-			String input = textField.getText();
+			Anotacao Lido = new Anotacao ();   //Este código adiciona uma anotação, com Nome, MetaTag e Texto 
+			String Nome_Lido = Formulario.get_Texto_i_Campo(0);
+			String Texto_Lido = Formulario.get_Texto_i_Campo(1);
+			String MetaTag_Lida = Formulario.get_Texto_i_Campo(2);
 			
-			Lido.Escrever_Texto(input);
+			
+			Lido.Escrever_Nome(Nome_Lido);
+			Lido.Escrever_Texto(Texto_Lido);
+			Lido.Escrever_MetaTag(MetaTag_Lida);
 			Lido.Escrever_Data();
-			Lista.add(Lido);
 			
-			textArea.append("Anotacao " + Lista.size() + ": \"" + Lista.get(Lista.size() - 1).getTexto() + "\", anotado em " + Lista.get(Lista.size() - 1).getData()+"\n");
-			textField.selectAll();
+			Lista.add(Lido);
+			Show_All();
 		}
 		
-		else if (source == textField2)
+		else if (source == Botao4)
 		{
-			n = Integer.parseInt(textField2.getText());
+			n = Integer.parseInt(Formulario.get_Texto_i_Campo(3));   //Este código remove uma anotação, digitada no campo "Remover"
 			Remover(n - 1);
 		}
-		else if (source == textField3)
+		else if (source == Botao5)  //Este código edita uma anotação, a partir da digitação do No da anotação e do novo texto a ser inserido
 		{
 			Anotacao Edicao = new Anotacao();
-			String input2 = textField3.getText();
-			String numero;
+			String input2 = Formulario.get_Texto_i_Campo(4);
+			String numero_em_string;
+			int numero;
 			if (input2.indexOf(',') > 0)
 			{
-				numero = input2.substring(0, input2.indexOf(',') );
-				
-				
-				System.out.println("NUMERO eh:" + numero + "indexOf(',') = " + input2.indexOf(',') );
+				numero_em_string = input2.substring(0, input2.indexOf(',') );
 				
 				input2 = input2.substring(input2.indexOf(',') + 1);
 				
+				numero = Integer.parseInt(numero_em_string) - 1;
+				if (numero >= 0 && numero < Lista.size())
 				Edicao.Escrever_Texto(input2);
+				Edicao.Escrever_Nome(Lista.get(numero).getNome());
+				Edicao.Escrever_MetaTag(Lista.get(numero).getMetaTag());
+				
 				Edicao.Escrever_Data();
 						
-				Editar(Integer.parseInt(numero) - 1, Edicao);
+				Editar(numero, Edicao);
 				
 				Show_All();
 				
 			}
-			else  System.out.println("ERRO: Entrada indevida!");
+			else  System.out.println("ERRO: Entrada indevida! Vc não separou o número da anotação e o novo conteúdo por vírgula ou digitou um número inválido!");
 		}
 		else if (source == Botao)
 		{
-			Data_Crescente ();
+			Data_Decrescente ();   //Ordenar por Data
 			
+		}
+		else if (source == Botao2)
+		{
+			Ordem_Alfabetica_Texto();   //Ordenar por Texto
+		}
+		else if (source == Botao6)
+		{
+			Ordem_Alfabetica_Nome ();    //Ordenar por Nome
+		}
+		else if (source == Botao7)
+		{
+			Ordem_Alfabetica_MetaTag();   //Ordenar por MetaTag
 		}
 		else if (source == item_Salvar)
 		{
 			try
 			{
-				Salvar("saida.txt");
+				Salvar("saida.txt");   //Salvar
 			}
 			catch (IOException ev)
 			{
@@ -139,49 +171,75 @@ public class Notepad extends JFrame implements ActionListener{
 		}
 	}
 	
-	
-	private void Anotar_Posicao_n (int n, String input)
+	//Esta função mostra na Tela as anotações
+	private void Show_All ()   
 	{
-		Anotacao Lido = new Anotacao ();
-		Lido.Escrever_Texto(input);
-		Lido.Escrever_Data();
-		Lista.add(Lido);
-	}
-	
-	private void Show_All ()
-	{
+		textArea.setText("");
 		for (int i=0; i< Lista.size(); i++)
-			textArea.append("Anotacao " + (i + 1)+ ": \"" + Lista.get(i).getTexto() + "\", anotado em " + Lista.get(i).getData() + "\n");
+			textArea.append("Anotacao " + (i + 1) + ": \r\n" + Lista.get(i).getNome()  + "\r\n" + Lista.get(i).getTexto() + "\r\n" + Lista.get(i).getMetaTag() + "\r\n" +  Lista.get(i).getData() + "\r\n");
 	}
+	
+	//Esta função remove uma anotação.
 	
 	public void Remover (int n)                //Remove a (n+1)ésima anotação: 0 é a primeira anotação.
 	{
-		textArea.setText("");
 		if (n < Lista.size())
 		{
 			Lista.remove(n);
 			Show_All();	
 		}
-		else textArea.append("ERRO");
+		else textArea.append("ERRO: Não se pode remover essa anotação, pois a entrada é inválida!");
 	}
 	
-	public void Editar (int n, Anotacao Anotacao_Substituta)    //Remove a (n+1)ésima anotação, substituindo-a por Anotacao_Substituta
+	//Esta função remove a (n+1)ésima anotação, substituindo-a por Anotacao_Substituta
+	
+	public void Editar (int n, Anotacao Anotacao_Substituta)    
 	{
-		textArea.setText("");
 		if (n < Lista.size())
 		{
 			Lista.remove(n);
 			Lista.add(n, Anotacao_Substituta);		
 		}
-		else textArea.append("ERRO");
+		else textArea.append("ERRO: não se pode editar essa anotação, pois a entrada é inválida!");
 	}
 	
-	public void Data_Crescente ()
+	//Esta função ordena a Lista de anotações por ordem de Data Decrescente
+	
+	public void Data_Decrescente ()
 	{
 		Lista.Ordenar_Por_Data();
 		textArea.setText("");
 		Show_All();
 	}
+	
+	//Esta função ordena a Lista de anotações por Ordem Alfabética de Texto
+	
+	public void Ordem_Alfabetica_Texto ()
+	{
+		Lista.Ordenar_Por_Texto();
+		textArea.setText("");
+		Show_All();
+	}
+	
+	//Esta função ordena a Lista de anotações por Ordem Alfabética de Nome
+	
+	public void Ordem_Alfabetica_Nome ()
+	{
+		Lista.Ordenar_Por_Nome();
+		textArea.setText("");
+		Show_All();
+	}
+	
+	//Esta função ordena a Lista de anotações por Ordem Alfabética de MetaTag
+
+	public void Ordem_Alfabetica_MetaTag ()
+	{
+		Lista.Ordenar_Por_MetaTag();
+		textArea.setText("");
+		Show_All();
+	}
+	
+	//Esta função Salva a Lista de Anotações no arquivo "saida.txt"
 	
 	public void Salvar (String Nome_Arquivo) throws IOException
 	{
@@ -205,14 +263,24 @@ public class Notepad extends JFrame implements ActionListener{
 		
 	}
 	
+	//Função main: roda o programa
+	
 	public static void main(String[] args) {
 		
 		Notepad bloco = new Notepad ();
 		
+		//Acrescentar os elementos e rodar o programa.
+		
+		
+		bloco.setTitle("Notepad");
 		bloco.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		bloco.add(Panel);
+		bloco.add(Formulario);
+		bloco.add(PanelButton,BorderLayout.EAST);
+		bloco.add(TextAreaPanel,BorderLayout.SOUTH);
 		bloco.pack();
-		bloco.setVisible(true);
+		bloco.setVisible(true);   
+		
+		
 		
 	}
 }
